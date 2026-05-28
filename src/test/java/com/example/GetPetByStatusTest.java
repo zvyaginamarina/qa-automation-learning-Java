@@ -1,10 +1,13 @@
 package com.example;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.empty;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.restassured.RestAssured;
@@ -30,21 +33,26 @@ public class GetPetByStatusTest {
                 .body("size()", greaterThan(0));
     }
 
+    @Disabled("test irrelevant, repeats createGetDeletePet")
     @Test
     void createPet() {
+
+        int inputId = 100;
+
         given()
                 .contentType(ContentType.JSON)
-                .body(new CreatePet(100))
+                .body(new CreatePet(inputId))
                 .when()
                 .post("/pet")
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(100))
+                .body("id", equalTo(inputId))
                 .body("photoUrls", empty())
                 .body("tags", empty());
 
     }
 
+    @Disabled("test irrelevant, hardcoded data, repeats createGetDeletePet")
     @Test
     void getPetById() {
         given()
@@ -64,6 +72,10 @@ public class GetPetByStatusTest {
                 .when()
                 .post("/pet")
                 .then()
+                .statusCode(200)
+                .body("id", equalTo(2))
+                .body("photoUrls", empty())
+                .body("tags", empty())
                 .extract()
                 .path("id");
 
@@ -82,6 +94,7 @@ public class GetPetByStatusTest {
                 .body("message", equalTo(Integer.toString(petId)));
 
     }
+
 }
 
 class CreatePet {
